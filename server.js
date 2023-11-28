@@ -1,20 +1,18 @@
 const express = require ('express');
 const dotenv = require ('dotenv');
-
+const ConnectDB = require ('./config/ConnectDB');
 
 const app = express();
 // configrition
 dotenv.config({path:"config.env"});
 
+ConnectDB();
 
 
-
-
-
-const server = app.listen( process.env.PORT , (message) => {
+const server = app.listen( process.env.PORT , () => {
     if ( process.env.NODE_ENV == "dev" )
       console.log('port is opend ' , process.env.PORT );
-})
+});
 
 
 process.on('unhandledRejection' , (err) => {
@@ -23,4 +21,4 @@ process.on('unhandledRejection' , (err) => {
         console.log('server Shut Down')
         process.exit(1);
     })
-})
+});
