@@ -1,12 +1,19 @@
 const express = require ('express');
 const dotenv = require ('dotenv');
 const ConnectDB = require ('./config/ConnectDB');
+const UndefindRoute = require ('./middleware/UndefindRoute');
+const ErrorRoute = require ('./middleware/ErrorRoute');
+
 
 const app = express();
 // configrition
 dotenv.config({path:"config.env"});
 
 ConnectDB();
+
+app.all('*' , UndefindRoute );
+
+app.use(ErrorRoute);
 
 
 const server = app.listen( process.env.PORT , () => {

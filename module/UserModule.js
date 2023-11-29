@@ -5,7 +5,6 @@ const UserSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, "name is required"],
-      unique: [true, "name must be unique"],
     },
 
     slugify: {
@@ -28,7 +27,8 @@ const UserSchema = new mongoose.Schema(
     password : {
         type : String ,
         required : [true , "password is required"]
-    }
+    },
+
   },
   { timestamps: true }
 );
@@ -36,6 +36,8 @@ const UserSchema = new mongoose.Schema(
 
 
 const UserModule = mongoose.model("user" , UserSchema );
+
+
 
 
 module.exports = UserModule ;
