@@ -29,7 +29,7 @@ exports.CreateUserValidator = [
 
         const isValid = [ "user" , "admin" , "manager"].includes(value);
 
-        if ( isValid )
+        if ( !isValid )
           throw new Error (" this role not include in systeme ");
 
         return true ;

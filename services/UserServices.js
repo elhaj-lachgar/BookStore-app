@@ -13,7 +13,9 @@ const { GetElementService } = require('./Factory')
 // per admin
 // url api/v1/user
 exports.CreateUserService = asynchandler(async (req, res, next) => {
+
   req.body.slugify = slugify(req.body.name);
+
 
   const user = await UserModule.create(req.body);
 

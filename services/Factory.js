@@ -6,7 +6,7 @@ exports.GetElementService = (module) =>
   asynchandler(async (req, res, next) => {
     const TotaleDoucement = await module.countDocuments();
 
-    const { MongoQuery, pagination } = new FeatureMethode(module, req.query)
+    const { MongoQuery, pagination } = new FeatureMethode( module , req.query )
       .FiledsBy()
       .Pagination(TotaleDoucement)
       .SortBy()

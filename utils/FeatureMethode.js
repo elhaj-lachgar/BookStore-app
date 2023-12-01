@@ -10,7 +10,8 @@ class FeatureMethode {
         this.limit = query.limit ;
         this.sort = query.sort ;
         this.fileds = query.fileds ;
-
+        this.query = query ;
+        
     }
     filter () {
         delete this.query.sort;
@@ -65,12 +66,10 @@ class FeatureMethode {
         let fieldsStr ;
 
         if ( this.fields){
-            fieldsStr = this.fieldsValue.split(',').join(' ')
+            fieldsStr = this.fieldsValue.split(',').join(' ');
+            this.MongoQuery = this.MongoQuery.select(fieldsStr);
         }
-        else{
-            fieldsStr = "-createdAt"
-        }
-        this.MongoQuery = this.MongoQuery.select(fieldsStr);
+        
         return this ;
     }
 

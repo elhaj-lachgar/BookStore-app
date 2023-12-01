@@ -16,7 +16,7 @@ const ErrorRoute = async ( error , req , res , next ) => {
     }
 
 
-    return res.status(error.StatusCode).json({ error : ObjError });
+    return res.status(error.StatusCode || 500 ).json({ error : ObjError });
 
 }
 
