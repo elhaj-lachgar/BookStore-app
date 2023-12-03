@@ -25,7 +25,7 @@ exports.CreateToCartService = asynchandler(async (req, res, next) => {
 // per user
 // url api/v1/cart/:id
 exports.AddToCartService = asynchandler(async (req, res, next) => {
-  const cart = await CartModule.findOne({ _id: req.params.id });
+  const cart = await CartModule.findOne({ _id: req.params.id ,user : req.user._id });
 
   if (!cart) return next(new ErrorHandler("cart not found", 404));
 
@@ -71,7 +71,7 @@ exports.AddToCartService = asynchandler(async (req, res, next) => {
 // per user
 // url api/v1/cart/:id
 exports.DeleteCartService = asynchandler(async (req, res, next) => {
-  const cart = await CartModule.findOne({ _id: req.params.id });
+  const cart = await CartModule.findOne({ _id: req.params.id ,  user : req.user._id});
 
   if (!cart) return next(new ErrorHandler("cart not found", 404));
 
@@ -104,7 +104,7 @@ exports.DeleteCartService = asynchandler(async (req, res, next) => {
 // per user
 // url api/v1/cart/:id
 exports.UpdateElmentOfCartService = asynchandler(async (req, res, next) => {
-  const cart = await CartModule.findOne({ _id: req.params.id });
+  const cart = await CartModule.findOne({ _id: req.params.id , user : req.user._id });
 
   if (!cart) return next(new ErrorHandler("cart not found", 404));
 
@@ -140,7 +140,7 @@ exports.UpdateElmentOfCartService = asynchandler(async (req, res, next) => {
 // url api/v1/cart/:id
 exports.ClearCardService = asynchandler ( async ( req , res , next ) => {
 
-    const cart = await CartModule.findOne({ _id : req.params.id });
+    const cart = await CartModule.findOne({ _id : req.params.id , user : req.user._id });
 
     if ( ! cart )
       return next ( new ErrorHandler (" cart not found "));
@@ -157,4 +157,17 @@ exports.ClearCardService = asynchandler ( async ( req , res , next ) => {
 
 
     return res.status(201).json({ data : cart })
+})
+
+// get card
+// per user
+// url api/v1/cart/:id
+exports.GetCardService = asynchandler ( async ( req , res , next ) => {
+
+  const cart = await CartModule.findOne({_id : req.params.id , user : req.user._id});
+
+  if ( ! cart )
+    return next ( new ErrorHandler ( "cart not found" , 404));
+
+  return res.status(201).json({data : cart});
 })

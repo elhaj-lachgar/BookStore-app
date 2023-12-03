@@ -103,3 +103,19 @@ exports.GetUserValidator = [
     
     ValidatorMiddleware
 ]
+
+exports.LogAdminValidator = [
+    
+    check("email")
+    .notEmpty()
+    .withMessage(" email of user is required ")
+    .isEmail()
+    .withMessage(" email not valid form"),
+    
+    check('password')
+    .notEmpty()
+    .withMessage(" password of user is required ")
+    .isLength({min : 8 , max : 16})
+    .withMessage(" password must be betwwen 8 to 16 charcters"),
+    ValidatorMiddleware
+]

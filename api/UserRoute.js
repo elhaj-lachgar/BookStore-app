@@ -6,6 +6,7 @@ const {
   GetUserByIdService,
   GetUserService,
   UpdateUserService,
+  LogAdminService
 } = require("../services/UserServices");
 
 const {
@@ -13,6 +14,7 @@ const {
   DeleteUserValidator,
   GetUserValidator,
   UpdateUserValidator,
+  LogAdminValidator
 } = require("../utils/validator/UserValidator");
 
 const { AllwodToService, AuthService } = require("../services/AuthService");
@@ -49,5 +51,7 @@ router
     DeleteUserValidator,
     DeleteUserService
   );
+
+  router.post('/admin' , LogAdminValidator ,LogAdminService)
 
 module.exports = router;

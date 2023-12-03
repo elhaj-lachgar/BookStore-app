@@ -90,3 +90,26 @@ exports.GetUserByIdService = asynchandler ( async ( req , res , next ) => {
 // per admin
 // url api/v1/user
 exports.GetUserService = GetElementService(UserModule);
+
+
+// loging of admin
+// per admin
+// url api/v1/admin
+exports.LogAdminService = asynchandler ( async ( req , res , next ) => {
+
+  const user = await UserModule.findOne({_id : req.body.email});
+
+  if ( ! user ) 
+    return next ( new ErrorHandler ('user not found' , 404 ));
+
+  if ( user.role != "admin" )
+    return next ( new ErrorHandler ('unathorization' , 403 ));
+
+  if ( req.body.rest_code  != process.env.REST_CODE )
+    return next ( new ErrorHandler ("unathorization" , 403 ));
+
+  const RespObj = user ;
+  RespObj.password = undefined ;
+
+  return res.status(201).json({ data : RespObj});
+})
