@@ -2,7 +2,7 @@ const CartModule = require("../module/CartModule");
 
 const asynchandler = require("express-async-handler");
 
-const ErrorHandler = require("express-async-handler");
+const ErrorHandler = require("../utils/ErrorHandler");
 
 const BookModule = require("../module/BookModule");
 
@@ -25,6 +25,7 @@ exports.CreateToCartService = asynchandler(async (req, res, next) => {
 // per user
 // url api/v1/cart/:id
 exports.AddToCartService = asynchandler(async (req, res, next) => {
+
   const cart = await CartModule.findOne({ _id: req.params.id ,user : req.user._id });
 
   if (!cart) return next(new ErrorHandler("cart not found", 404));
@@ -34,29 +35,37 @@ exports.AddToCartService = asynchandler(async (req, res, next) => {
   if (!book) return next(new ErrorHandler("book not found", 404));
 
   const index = cart.books.findIndex((ele) => {
-    return ele.book === req.body.bookId;
+    return ele.book.toString() === req.body.bookId;
   });
 
   if (index <= -1) {
     cart.books.push({
       book: req.body.bookId,
-      count_book: req.body.quantity,
+      count_book: req.body.quantity || 1,
       price: book.price,
     });
   }
 
-  cart.books[index].count_book =
-    cart.books[index].count_book + req.body.quantity;
 
-  cart.shoppingPrice = parseFloat(process.env.SHOPE);
 
-  cart.taxPrice = parseFloat(process.env.TAX);
+  else
+  {
+    cart.books[index].count_book +=  req.body.quantity || 1 ;
+  }
 
-  let totalePrice;
+
+  await cart.save();
+
+  cart.shoppingPrice = 5;
+
+  cart.taxPrice = 5;
+
+  let totalePrice = 0  ;
 
   cart.books.forEach((element) => {
     totalePrice += element.price * element.count_book;
   });
+
 
   totalePrice += cart.shoppingPrice + cart.taxPrice;
 
@@ -71,6 +80,7 @@ exports.AddToCartService = asynchandler(async (req, res, next) => {
 // per user
 // url api/v1/cart/:id
 exports.DeleteCartService = asynchandler(async (req, res, next) => {
+
   const cart = await CartModule.findOne({ _id: req.params.id ,  user : req.user._id});
 
   if (!cart) return next(new ErrorHandler("cart not found", 404));
@@ -80,7 +90,7 @@ exports.DeleteCartService = asynchandler(async (req, res, next) => {
   if (!book) return next(new ErrorHandler("book not found", 404));
 
   const index = cart.books.findIndex((ele) => {
-    return ele.book === req.body.bookId;
+    return ele.book.toString() === req.body.bookId;
   });
 
   if (index <= -1) return next(new ErrorHandler("book not found in cart"));
@@ -113,12 +123,12 @@ exports.UpdateElmentOfCartService = asynchandler(async (req, res, next) => {
   if (!book) return next(new ErrorHandler("book not found", 404));
 
   const index = cart.books.findIndex((ele) => {
-    return ele.book.toJSON() == req.body.bookId;
+    return ele.book.toString() == req.body.bookId;
   });
 
   if (index <= -1) return next(new ErrorHandler("book not found in cart", 404));
 
-  const count_book = req.body.count_book;
+  const count_book = req.body.quantity || cart.books[index].count_book ;
 
   cart.totalePrice =
     cart.totalePrice +

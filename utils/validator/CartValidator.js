@@ -30,6 +30,7 @@ exports.DeleteElementFromCartValidator = [
     .withMessage("book id is required")
     .isMongoId()
     .withMessage(" book id not valid"),
+    ValidatorMiddleware
 ]
 
 exports.UpdateElementFromCartValidator = [
@@ -39,11 +40,18 @@ exports.UpdateElementFromCartValidator = [
     .isMongoId()
     .withMessage("not valid id"),
 
+    check("quantity")
+    .notEmpty()
+    .withMessage("quantity is required ")
+    .isNumeric()
+    .withMessage("not valid form for quantity"),
+
     check('bookId')
     .notEmpty()
     .withMessage("book id is required")
     .isMongoId()
     .withMessage(" book id not valid"),
+    ValidatorMiddleware
 ]
 
 exports.ClearCartValidator = [
@@ -52,6 +60,7 @@ exports.ClearCartValidator = [
     .withMessage(" id  is required ")
     .isMongoId()
     .withMessage("not valid id"),
+    ValidatorMiddleware
 ]
 
 exports.GetCartValidator = [
@@ -60,4 +69,5 @@ exports.GetCartValidator = [
     .withMessage(" id  is required ")
     .isMongoId()
     .withMessage("not valid id"),
+    ValidatorMiddleware
 ]

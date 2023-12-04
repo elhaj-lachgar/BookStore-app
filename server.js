@@ -5,6 +5,10 @@ const UndefindRoute = require ('./middleware/UndefindRoute');
 const ErrorRoute = require ('./middleware/ErrorRoute');
 const UserRoute = require ('./api/UserRoute');
 const AuthRoute = require ('./api/AuthRoute');
+const BookRoute = require ('./api/BookRoute');
+const CartRoute = require ('./api/CartRoute');
+const PortListen = require ('./config/PortListen');
+const unhandledRejection = require ('./config/UnhandledRejection');
 const cors = require ("cors");
 const app = express();
 
@@ -19,22 +23,15 @@ app.use(express.json());
 
 app.use("/api/v1/user" , UserRoute);
 app.use("/api/v1/auth" , AuthRoute);
+app.use("/api/v1/book" , BookRoute);
+app.use("/api/v1/cart" , CartRoute);
 
 app.all('*' , UndefindRoute );
 
 app.use(ErrorRoute);
 
 
-const server = app.listen( process.env.PORT , () => {
-    if ( process.env.NODE_ENV == "dev" )
-      console.log('port is opend ' , process.env.PORT );
-});
+const server = app.listen( process.env.PORT , PortListen );
 
 
-process.on('unhandledRejection' , (err) => {
-    console.log(err);
-    server.close(() => {
-        console.log('server Shut Down')
-        process.exit(1);
-    })
-});
+process.on('unhandledRejection' ,(err) => unhandledRejection(err , server ));
